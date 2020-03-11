@@ -1,0 +1,63 @@
+name: ZenLib CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request 
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ] #Everytime master branch is updated
+    paths-ignore: ['hooks/*', '.clang-format', '.gitignore', 'create_git_hooks.sh', 'LICENSE', 'README.md'] #only when these files are modifed
+  pull_request:
+    branches: [ master ] #for every pull request going to master
+    paths-ignore: ['hooks/*', '.clang-format', '.gitignore', 'create_git_hooks.sh', 'LICENSE', 'README.md'] #only when these files are modifed
+
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies via apt
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        set -e
+        sudo apt-get update
+        sudo apt-get install apt-transport-https ca-certificates gnupg software-properties-common wget gcc-8 g++-8
+        wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add - #newer cmake
+        sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
+        sudo apt-get update
+        sudo apt-get install cmake
+    
+    - name: Build ZenLib
+      shell: bash
+      run: |
+        set -e
+        export CC=gcc-8
+        export CXX=g++-8
+        rm -rf build
+        mkdir build
+        cd build
+        cmake -DZENLIB_BUILD_TESTS=ON ..
+        cmake --build . --parallel $(nproc)
+
+    - name: List ZenLib build directory
+      shell: bash
+      run: |
+        set -e
+        find build/
+        
+    - name: Run VDFS test
+      shell: bash
+      run: |
+        set -e
+        cd build/tests/
+        TESTRESULT=$(./test_vdfs)
+        printf "$TESTRESULT\n"
+        if [ $(echo "$TESTRESULT" | grep -e 'FAILED') ]; then
+          exit 1
+        fi

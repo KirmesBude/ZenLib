@@ -31,6 +31,9 @@ add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src
                  ${CMAKE_BINARY_DIR}/googletest-build
                  EXCLUDE_FROM_ALL)
 
+#Add test input files to be copied
+file(COPY files DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
 add_executable(test_vdfs test_vdfs.cpp)
 target_link_libraries(test_vdfs gtest vdfs utils)
 
