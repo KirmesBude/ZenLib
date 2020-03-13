@@ -1,4 +1,4 @@
-# ZenLib [![Build Status](https://travis-ci.org/degenerated1123/ZenLib.svg?branch=master)](https://travis-ci.org/degenerated1123/ZenLib)
+# ZenLib [![Build Status](https://github.com/KirmesBude/ZenLib/workflows/ZenLib%20CI/badge.svg)](https://github.com/KirmesBude/ZenLib/actions?query=workflow%3A%22ZenLib+CI%22+is%3Asuccess+branch%3Amaster)
 Loading of proprietary formats used by the engine of the games "Gothic" and "Gothic II".
 
 ### Features
