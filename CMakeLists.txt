@@ -11,43 +11,47 @@ set(CMAKE_CXX_STANDARD 14)
 # -----------------------------------------------------------------------------
 # External: libsquish
 #------------------------------------------------------------------------------
-FetchContent_Declare(
-  libsquish
-  URL       https://downloads.sourceforge.net/project/libsquish/libsquish-1.15.tgz
-  URL_HASH  SHA1=51844b9a8bc815a27e2cc0ffbede5fee3ef75110
-)
+if(NOT TARGET squish)
+	FetchContent_Declare(
+	  libsquish
+	  URL       https://downloads.sourceforge.net/project/libsquish/libsquish-1.15.tgz
+	  URL_HASH  SHA1=51844b9a8bc815a27e2cc0ffbede5fee3ef75110
+	)
 
-if(NOT libsquish_POPULATED)
-  message(STATUS "ZenLib: Populating libsquish...")
+	if(NOT libsquish_POPULATED)
+	  message(STATUS "ZenLib: Populating libsquish...")
 
-  FetchContent_Populate(libsquish)
+	  FetchContent_Populate(libsquish)
 
-  SET(BUILD_SQUISH_WITH_OPENMP OFF CACHE BOOL "" FORCE)
-  add_subdirectory(${libsquish_SOURCE_DIR} ${libsquish_BINARY_DIR})
+	  SET(BUILD_SQUISH_WITH_OPENMP OFF CACHE BOOL "" FORCE)
+	  add_subdirectory(${libsquish_SOURCE_DIR} ${libsquish_BINARY_DIR})
 
-  message(STATUS "ZenLib: Done populating libsquish!")
+	  message(STATUS "ZenLib: Done populating libsquish!")
+	endif()
 endif()
 
 # -----------------------------------------------------------------------------
 # External: physfs
 #------------------------------------------------------------------------------
 
-FetchContent_Declare(
-  physfs
-  URL       https://icculus.org/physfs/downloads/physfs-3.0.2.tar.bz2
-  URL_HASH  SHA1=6a15c458898d0570101d8f173201cde9ced78df7
-)
+if(NOT TARGET physfs)
+	FetchContent_Declare(
+	  physfs
+	  URL       https://icculus.org/physfs/downloads/physfs-3.0.2.tar.bz2
+	  URL_HASH  SHA1=6a15c458898d0570101d8f173201cde9ced78df7
+	)
 
-if(NOT physfs_POPULATED)
-  message(STATUS "ZenLib: Populating physfs...")
+	if(NOT physfs_POPULATED)
+	  message(STATUS "ZenLib: Populating physfs...")
 
-  FetchContent_Populate(physfs)
+	  FetchContent_Populate(physfs)
 
-  set(PHYSFS_BUILD_SHARED OFF)
-  set(PHYSFS_BUILD_TEST OFF)
-  add_subdirectory(${physfs_SOURCE_DIR} ${physfs_BINARY_DIR})
+	  set(PHYSFS_BUILD_SHARED OFF)
+	  set(PHYSFS_BUILD_TEST OFF)
+	  add_subdirectory(${physfs_SOURCE_DIR} ${physfs_BINARY_DIR})
 
-  message(STATUS "ZenLib: Done populating physfs!")
+	  message(STATUS "ZenLib: Done populating physfs!")
+	endif()
 endif()
 
 # -----------------------------------------------------------------------------
